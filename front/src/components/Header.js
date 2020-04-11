@@ -3,6 +3,8 @@ import { useMutation } from '@apollo/react-hooks';
 
 import { CREATE_TODO_MUTATION, TODO_LIST_QUERY } from '../querys';
 
+import '../styles/App.css';
+
 const Header = _ => {
     const [state, setState] = useState({ text: '' });
     const [createTodo] = useMutation(CREATE_TODO_MUTATION);

@@ -1,0 +1,67 @@
+.login-container {
+    /* background-color: darkblue; */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login {
+    background-color: #963237;
+    /* width: 60%; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 6px 22px 0px rgba(0, 0, 0, 0.5);
+}
+
+.login form input {
+    display: block;
+    width: 25vw;
+    height: 5vh;
+    margin: 30px 10px;
+    border: 0;
+    font-size: 18px;
+    padding-left: 10px;
+    border-radius: 3px;
+}
+
+.login form button[type='submit'] {
+    display: block;
+    background-color: rgb(215, 191, 58);
+    margin: auto;
+    padding: 7px 12px;
+    border-radius: 3px;
+    font-size: 18px;
+    font-weight: 500;
+    box-shadow: 0px 6px 22px 0px rgba(0, 0, 0, 0.4);
+    color: rgb(54, 53, 53);
+    margin-bottom: 10px;
+}
+
+.login form button[type='submit']:hover {
+    background-color: rgb(192, 171, 54);
+}
+
+.login form button[type='submit']:active {
+    background-color: rgb(129, 116, 41);
+}
+
+.login .messages {
+    width: 25.8vw;
+    height: 8vh;
+    margin: 30px 10px;
+    background-color: rgb(215, 191, 58);
+    border-radius: 3px;
+}
+
+@media (max-width: 800px) {
+    .login form input {
+        width: 70vw;
+    }
+    .login .messages {
+        width: 72vw;
+    }
+}
