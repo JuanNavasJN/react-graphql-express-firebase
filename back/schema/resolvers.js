@@ -63,13 +63,46 @@ const resolvers = {
                 });
 
                 // console.log('items', items);
-                return { items };
+
+                let newItems = items.map(i => {
+                    if (!i.users) return i;
+                    let users = [];
+                    for (let key in i.users) users.push(i.users[key]);
+                    i.users = users;
+                    return i;
+                });
+
+                return { items: newItems };
             } else {
-                return { items: await Todo.getAllTodos() };
+                let items = await Todo.getAllTodos();
+
+                let newItems = items.map(i => {
+                    if (!i.users) return i;
+                    let users = [];
+                    for (let key in i.users) users.push(i.users[key]);
+                    i.users = users;
+                    return i;
+                });
+
+                return { items: newItems };
             }
         },
-        async user(_, { id }) {
-            return await User.findUserById(id);
+        async user(_, { id, email, password }) {
+            if (email && password) {
+                const user = await User.findUserByEmail(email);
+
+                if (user.password !== password) {
+                    user.logged = false;
+                    return user;
+                } else {
+                    user.logged = true;
+                    return user;
+                }
+            } else if (id && !email) {
+                return await User.findUserById(id);
+            } else if (!id && email) {
+                return await User.findUserByEmail(email);
+            }
         },
         async users() {
             return await User.getAllUsers();
@@ -80,6 +113,8 @@ const resolvers = {
             let user = new User({
                 name: data.name,
                 email: data.email,
+                password: data.password,
+                createdAt: String(new Date().getTime()),
             });
             return await user.save();
         },
@@ -106,6 +141,46 @@ const resolvers = {
         },
         async todoDelete(_, { filter }) {
             return await Todo.deleteById(filter.id);
+        },
+        async addUserToTodo(_, { id, user }) {
+            let todo = await Todo.findTodoById(id);
+            let exists = false;
+
+            for (let key in todo.users) {
+                if (todo.users[key] === user) {
+                    exists = true;
+                }
+            }
+
+            if (!exists) await Todo.addUserToTodo(id, user);
+
+            todo = await Todo.findTodoById(id);
+
+            let users = [];
+
+            for (let key in todo.users) {
+                users.push(todo.users[key]);
+            }
+
+            todo.users = users;
+
+            return todo;
+        },
+        async removeUserTodo(_, { id, user }) {
+            let todo = await Todo.findTodoById(id);
+
+            let users = [];
+
+            for (let key in todo.users) {
+                users.push(todo.users[key]);
+            }
+            users = users.filter(e => e !== user);
+
+            todo.users = users;
+            todo.updatedAt = String(new Date().getTime());
+            await Todo.updateTodo(todo);
+
+            return todo;
         },
     },
 };

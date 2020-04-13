@@ -3,10 +3,11 @@ const gql = require('graphql-tag');
 const typeDefs = gql`
     type Todo {
         id: ID
-        text: String
+        text: String!
         completed: Boolean
         createdAt: String
         updatedAt: String
+        users: [String]
     }
 
     input TodoCreateInput {
@@ -17,6 +18,7 @@ const typeDefs = gql`
     input UserInput {
         name: String!
         email: String!
+        password: String!
     }
 
     input TodoKeyFilter {
@@ -40,6 +42,7 @@ const typeDefs = gql`
         id: ID
         name: String
         email: String
+        logged: Boolean
     }
 
     enum Sorts {
@@ -51,7 +54,7 @@ const typeDefs = gql`
     type Query {
         todo(id: ID): Todo
         todosList(orderBy: [Sorts]): TodosList
-        user(id: ID): User
+        user(id: ID, email: String, password: String): User
         users: [User]
     }
 
@@ -60,6 +63,8 @@ const typeDefs = gql`
         todoCreate(data: TodoCreateInput): Todo
         todoDelete(filter: TodoKeyFilter): SuccessResponse
         todoUpdate(filter: TodoKeyFilter, data: TodoUpdateInput): Todo
+        addUserToTodo(id: ID!, user: String!): Todo
+        removeUserTodo(id: ID!, user: String!): Todo
     }
 `;
 

@@ -14,12 +14,16 @@ import Login from './components/Login';
 import './styles/todo.css';
 
 const App = _ => {
-    const [isAuth] = useState(true);
+    const [isAuth, setAuth] = useState(false);
 
     return (
         <Router>
             <Switch>
-                <Route exact path="/login" component={Login} />
+                <Route
+                    exact
+                    path="/login"
+                    component={_ => Login({ isAuth, setAuth })}
+                />
 
                 {isAuth ? (
                     <Route

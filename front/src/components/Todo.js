@@ -5,14 +5,21 @@ import {
     TODO_LIST_QUERY,
     DELETE_TODO_MUTATION,
     TOGGLE_TODO_MUTATION,
+    REMOVE_USER_TODO_MUTATION,
 } from '../querys';
 
 export default function Todo({ todo, toggleModal }) {
     const [removeTodo] = useMutation(DELETE_TODO_MUTATION);
     const [toggleTodo] = useMutation(TOGGLE_TODO_MUTATION);
 
+    const [deleteUserOnTodo] = useMutation(REMOVE_USER_TODO_MUTATION);
+
     const handleClick = name => {
-        console.log('delete to: ', name, ' on: ', todo.id);
+        // console.log('delete to: ', name, ' on: ', todo.id);
+        deleteUserOnTodo({
+            variables: { id: todo.id, user: name },
+            refetchQueries: [{ query: TODO_LIST_QUERY }],
+        });
     };
 
     return (
@@ -50,30 +57,17 @@ export default function Todo({ todo, toggleModal }) {
                 </button>
 
                 <ul className="users">
-                    <li
-                        className="user"
-                        onClick={_ => handleClick('Juan Navas')}
-                    >
-                        J<span className="tooltiptext">Juan Navas</span>
-                    </li>
-                    <li
-                        className="user"
-                        onClick={_ => handleClick('Carlos Rua')}
-                    >
-                        C<span className="tooltiptext">Carlos Rua</span>
-                    </li>
-                    <li className="user" onClick={_ => handleClick('Roa Mun')}>
-                        R<span className="tooltiptext">Roa Mun</span>
-                    </li>
-                    <li
-                        className="user"
-                        onClick={_ => handleClick('Carla Lon')}
-                    >
-                        C<span className="tooltiptext">Carla Lon</span>
-                    </li>
-                    <li className="user" onClick={_ => handleClick('Ale Gut')}>
-                        A<span className="tooltiptext">Ale Gut</span>
-                    </li>
+                    {todo.users &&
+                        todo.users.map((i, idx) => (
+                            <li
+                                className="user"
+                                onClick={_ => handleClick(i)}
+                                key={idx}
+                            >
+                                {i.split('')[0].toUpperCase()}
+                                <span className="tooltiptext">{i}</span>
+                            </li>
+                        ))}
                 </ul>
             </div>
         </li>

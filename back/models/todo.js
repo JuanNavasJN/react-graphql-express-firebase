@@ -66,11 +66,11 @@ todo.updateTodo = todo =>
             });
     });
 
-todo.addUserToTodo = args =>
+todo.addUserToTodo = (id, user) =>
     new Promise(resolve => {
         database
-            .ref('todos/' + args.id + '/users')
-            .push(args.userid)
+            .ref('todos/' + id + '/users')
+            .push(user)
             .then(res => {
                 resolve();
             })

@@ -1,8 +1,8 @@
 const { database } = require('../services/firebase');
 
 // Create a user
-const user = function(input) {
-    this.save = function() {
+const user = function (input) {
+    this.save = function () {
         return new Promise(resolve => {
             database
                 .ref('users')
@@ -24,7 +24,37 @@ user.findUserById = id => {
             .equalTo(id)
             .once('value')
             .then(res => {
-                resolve(Object.assign({ id: id }, res.val()[id]));
+                if (res.val() === null) {
+                    resolve(null);
+                } else {
+                    resolve(Object.assign({ id: id }, res.val()[id]));
+                }
+            })
+            .catch(error => {
+                console.log('error', error);
+            });
+    });
+};
+user.findUserByEmail = email => {
+    return new Promise(resolve => {
+        database
+            .ref('users')
+            .orderByKey()
+            .once('value')
+            .then(res => {
+                let users = res.val();
+                for (let id in users) {
+                    if (users[id].email === email) {
+                        return resolve({
+                            id,
+                            email: users[id].email,
+                            password: users[id].password,
+                            name: users[id].name,
+                        });
+                    }
+                }
+
+                return resolve(null);
             })
             .catch(error => {
                 console.log('error', error);

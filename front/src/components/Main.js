@@ -3,17 +3,35 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { TODO_LIST_QUERY, TOGGLE_TODO_MUTATION } from '../querys';
+import {
+    TODO_LIST_QUERY,
+    TOGGLE_TODO_MUTATION,
+    USERS_QUERY,
+    ADD_USER_TO_TODO_MUTATION,
+} from '../querys';
 
 import Todo from './Todo';
 
 const Main = _ => {
     const { data, loading } = useQuery(TODO_LIST_QUERY);
+    const { data: users } = useQuery(USERS_QUERY);
+
     const [toggleTodo] = useMutation(TOGGLE_TODO_MUTATION);
+    const [addUserToTodo] = useMutation(ADD_USER_TO_TODO_MUTATION);
 
     const [todos, setTodos] = useState([]);
     const [modal, setModal] = useState(false);
+    const [allUsers, setAllUsers] = useState([]);
     const [currentTodoId, setCurrentTodoId] = useState('');
+
+    useEffect(
+        _ => {
+            if (users && users.users) {
+                setAllUsers(users.users);
+            }
+        },
+        [users]
+    );
 
     useLocation();
 
@@ -43,9 +61,14 @@ const Main = _ => {
         }
     };
 
-    const handleClick = e => {
+    const handleClick = async e => {
         const { innerText } = e.target;
-        console.log('agregar a: ', innerText, ' a esta tarea: ', currentTodoId);
+        // console.log('agregar a: ', innerText, ' a esta tarea: ', currentTodoId);
+
+        addUserToTodo({
+            variables: { id: currentTodoId, user: innerText },
+            refetchQueries: [{ query: TODO_LIST_QUERY }],
+        });
         toggleModal();
     };
 
@@ -63,11 +86,11 @@ const Main = _ => {
                         </span>
 
                         <ul>
-                            <li onClick={handleClick}>Juan Navas</li>
-                            <li onClick={handleClick}>Juan Navas</li>
-                            <li onClick={handleClick}>Juan Navas</li>
-                            <li onClick={handleClick}>Juan Navas</li>
-                            <li onClick={handleClick}>Juan Navas</li>
+                            {allUsers.map(e => (
+                                <li onClick={handleClick} key={e.name}>
+                                    {e.name}
+                                </li>
+                            ))}
                         </ul>
                     </div>
                 </div>
