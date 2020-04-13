@@ -52,6 +52,8 @@ const resolvers = {
             if (orderBy) {
                 let items = await Todo.getAllTodos();
 
+                if (items === null) return { items: [] };
+
                 orderBy.forEach(s => {
                     if (s === 'createdAt_DESC') {
                         items.sort(createdSortDesc);
