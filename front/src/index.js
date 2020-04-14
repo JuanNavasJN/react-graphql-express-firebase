@@ -12,8 +12,8 @@ import { ApolloProvider } from '@apollo/react-hooks';
 
 const cache = new InMemoryCache();
 
-// const API_ENDPOINT_URI = 'https://api.8base.com/ck7b04f94000508l0f5lrfo73';
-const API_ENDPOINT_URI = 'http://localhost:8080/graphql';
+const API_ENDPOINT_URI = 'https://api.8base.com/ck7b04f94000508l0f5lrfo73';
+// const API_ENDPOINT_URI = 'http://localhost:8080/graphql';
 // const API_ENDPOINT_URI = 'https://todo.juannavas.dev/graphql';
 
 const link = new HttpLink({

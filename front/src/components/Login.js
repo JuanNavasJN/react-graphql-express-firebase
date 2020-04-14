@@ -49,6 +49,10 @@ export default function Login({ setAuth, isAuth }) {
                 errors.push('Incorrect password');
                 setErrors([...errors]);
             }
+
+            if (data) {
+                console.log('new data', data);
+            }
         },
         // eslint-disable-next-line
         [data]

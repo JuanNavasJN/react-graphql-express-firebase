@@ -13,10 +13,19 @@ export const TODO_LIST_QUERY = gql`
     }
 `;
 
+// export const USERS_QUERY = gql`
+//     query Users {
+//         users {
+//             name
+//         }
+//     }
+// `;
 export const USERS_QUERY = gql`
-    query Users {
-        users {
-            name
+    query UsersList {
+        usersList {
+            items {
+                name
+            }
         }
     }
 `;

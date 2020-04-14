@@ -26,8 +26,8 @@ const Main = _ => {
 
     useEffect(
         _ => {
-            if (users && users.users) {
-                setAllUsers(users.users);
+            if (users && users.usersList.items.length >= 0) {
+                setAllUsers(users.usersList.items);
             }
         },
         [users]
